@@ -6,7 +6,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update \
  && apt-get install -y sudo
  
-RUN sudo apt-get -y install avahi-daemon
+RUN sudo apt-get -y install avahi-daemond
+RUN busopt=enable-dbus=no; sed -i "/^#$dbusopt/ c$dbusopt" /etc/avahi/avahi-daemon.conf
+RUN sudo /usr/sbin/avahi-daemon start
 
 RUN adduser --disabled-password --gecos '' wirepod
 RUN adduser wirepod sudo
